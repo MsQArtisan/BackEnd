@@ -17,15 +17,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
-
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
-
-app.use(express.json());
-
 app.use(morgan('dev'));
-
-app.use(express.static(__dirname, 'public'));
 
 // For Pusher
 const pusher = new Pusher({
@@ -36,35 +28,25 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// const storage = multer.diskStorage({
-//     destination: function(req, file, callback) {
-//         callback(null, '/src/uploads');
-//       },
-//     filename: (req, file, cb) => {
-//         cb(null, file.originalname);
-//     }
-// });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-      callback(null, '/src/uploads');
+    destination: (req, file, cb) => {
+        cb(null, './uploads/');
     },
-    filename: function (req, file, callback) {
-      callback(null, file.fieldname);
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
     }
-  });
-
-// const fileFilter = (req, file, cb) => {
-//     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
-//         cb(null, true);
-//     } else {
-//         cb(null, false);
-//         return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-//     }
-// }
-
-//const upload = multer({ storage: storage, fileFilter: fileFilter });
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+}
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 app.post('/api/upload', upload.array('image[]'), (req, res, next) => {

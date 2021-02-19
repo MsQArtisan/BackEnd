@@ -27,7 +27,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
-app.post('/upload', upload.array('img[]'), (req, res, next) => {
+router.post('/upload', upload.array('img[]'), (req, res, next) => {
     try {
         return res.status(201).json({
             message: 'File uploded successfully'

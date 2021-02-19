@@ -7,7 +7,7 @@ var reviewsController = require('./controller/reviews-controller');
 const AuthCtrl = require('./controller/resetPassword-controller');
 const multer = require('multer');
 
-//const DIR = 'uploads';
+const DIR = 'uploads';
 
 var ObjectId = require('mongodb').ObjectID;
 

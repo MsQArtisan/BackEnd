@@ -12,28 +12,28 @@ function createToken(user) {
     });
 }
 
-// exports.registerUser = (req, res) => {
-//     User.findOne({ email: req.body.email }, (err, user) => {
-//         if (err) {
-//             return res.status(400).json({ 'msg': err });
-//         }
-//         if (user) {
-//             return res.status(400).json({ 'msg': 'The email already exists' });
-//         }
-//         const url = 'http://18.220.197.206:8080/' + 'uploads/';
-//         let artisan = new User(req.body);
+exports.registerUser = (req, res) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(400).json({ 'msg': 'The email already exists' });
+        }
+        const url = 'http://18.220.197.206:8080/' + 'uploads/';
+        let artisan = new User(req.body);
 
-//         artisan['selfie'] = url + req.body.selfie;
-//         artisan['primaryIdPic'] = url + req.body.primaryIdPic;
-//         artisan['nbi'] = url + req.body.nbi;
-//         artisan.save((err, user) => {
-//             if (err) {
-//                 return res.status(400).json({ 'msg': err });
-//             }
-//             return res.status(201).json(user);
-//         });
-//     });
-// };
+        artisan['selfie'] = url + req.body.selfie;
+        artisan['primaryIdPic'] = url + req.body.primaryIdPic;
+        artisan['nbi'] = url + req.body.nbi;
+        artisan.save((err, user) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }
+            return res.status(201).json(user);
+        });
+    });
+};
 
 
 exports.loginUser = (req, res) => {

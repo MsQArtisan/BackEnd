@@ -12,51 +12,50 @@ function createToken(user) {
     });
 }
 
-exports.registerUser = (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) {
-            return res.status(400).json({ 'msg': err });
-        }
-        if (user) {
-            return res.status(400).json({ 'msg': 'The email already exists' });
-        }
-        const url = req.protocol + "://" + '18.220.197.206' + ':' + 5000 + '/' + 'uploads/';
-        
-        let artisan = new User(req.body);
+// exports.registerUser = (req, res) => {
+//     User.findOne({ email: req.body.email }, (err, user) => {
+//         if (err) {
+//             return res.status(400).json({ 'msg': err });
+//         }
+//         if (user) {
+//             return res.status(400).json({ 'msg': 'The email already exists' });
+//         }
+//         const url = 'http://18.220.197.206:8080/' + 'uploads/';
+//         let artisan = new User(req.body);
 
-        artisan['selfie'] = url + req.body.selfie;
-        artisan['primaryIdPic'] = url + req.body.primaryIdPic;
-        artisan['nbi'] = url + req.body.nbi;
-        artisan.save((err, user) => {
-            if (err) {
-                return res.status(400).json({ 'msg': err });
-            }
-            return res.status(201).json(user);
-        });
-    });
-};
+//         artisan['selfie'] = url + req.body.selfie;
+//         artisan['primaryIdPic'] = url + req.body.primaryIdPic;
+//         artisan['nbi'] = url + req.body.nbi;
+//         artisan.save((err, user) => {
+//             if (err) {
+//                 return res.status(400).json({ 'msg': err });
+//             }
+//             return res.status(201).json(user);
+//         });
+//     });
+// };
 
 
-exports.loginUser = (req, res) => {
+// exports.loginUser = (req, res) => {
 
-    User.findOne({ email: req.body.email }, (err, user) => {
+//     User.findOne({ email: req.body.email }, (err, user) => {
 
-        if (err) {
-            return res.status(400).send({ 'msg': false });
-        }
-        if (!user) {
-            return res.status(400).json({ 'msg': 'The user does not exist' });
-        }
-        user.comparePassword(req.body.password, (err, isMatch) => {
-            if (isMatch && !err) {
-                loggedusers.push(user)
-                return res.send({ type: true, token: createToken(user), userId: user._id })
-            } else {
-                return res.status(400).json({ msg: 'The email and password don\'t match.' });
-            }
-        });
-    })
-};
+//         if (err) {
+//             return res.status(400).send({ 'msg': false });
+//         }
+//         if (!user) {
+//             return res.status(400).json({ 'msg': 'The user does not exist' });
+//         }
+//         user.comparePassword(req.body.password, (err, isMatch) => {
+//             if (isMatch && !err) {
+//                 loggedusers.push(user)
+//                 return res.send({ type: true, token: createToken(user), userId: user._id })
+//             } else {
+//                 return res.status(400).json({ msg: 'The email and password don\'t match.' });
+//             }
+//         });
+//     })
+// };
 
 exports.logoutUser = (req, res) => {
     let count = 0

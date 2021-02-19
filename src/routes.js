@@ -6,40 +6,7 @@ var orderController = require('./controller/orders-controller');
 var reviewsController = require('./controller/reviews-controller');
 const AuthCtrl = require('./controller/resetPassword-controller');
 
-var multer = require('multer');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
-});
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-    }
-}
-const upload = multer({ storage: storage, fileFilter: fileFilter });
-
-
-routes.post('/upload', upload.array('img[]'), (req, res, next) => {
-    try {
-        return res.status(201).json({
-            message: 'File uploded successfully'
-        });
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-
-
-routes.post('/register', userController.registerUser);
 // User Controller
 routes.post('/jobRestored', userController.jobRestored) //Restore Task 
 routes.post('/rejectedJobOrders', userController.rejectedJobOrders); //Cancelling or Rejecting the jobOrders
@@ -48,7 +15,7 @@ routes.post('/jobOrdersData', userController.addJobOrders);
 routes.post('/allJobsAccepted', userController.allJobAccepted);
 routes.post('/allCompletedJobs', userController.completedJob)
 routes.post('/logout', userController.logoutUser)
-
+routes.post('/register', userController.registerUser);
 routes.post('/login', userController.loginUser);
 routes.post('/account', userController.getUser);
 routes.post('/deletedCompletedTask', userController.deletedCompletedTask) //Deleted Task Or Store Task under Rejected  History Tracker

@@ -5,59 +5,41 @@ var customerController = require('./controller/customer-controller');
 var orderController = require('./controller/orders-controller');
 var reviewsController = require('./controller/reviews-controller');
 const AuthCtrl = require('./controller/resetPassword-controller');
-const multer = require('multer');
 
-const DIR = 'uploads';
-
-var ObjectId = require('mongodb').ObjectID;
+var multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, DIR);
+        cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname)
+        cb(null, file.originalname);
     }
 });
-
-var upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        console.log(req);
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
-});
+}
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
-routes.post('/register',upload.array('image[]')),(req, res) => {
-    console.log("testings!")
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) {
-            return res.status(400).json({ 'msg': err });
-        }
-        if (user) {
-            return res.status(400).json({ 'msg': 'The email already exists' });
-        }
-        const url = 'http://18.220.197.206:5000/' + 'uploads/';
-        let artisan = new User(req.body);
-
-        artisan['selfie'] = url + req.body.selfie;
-        artisan['primaryIdPic'] = url + req.body.primaryIdPic;
-        artisan['nbi'] = url + req.body.nbi;
-        artisan.save((err, user) => {
-            if (err) {
-                return res.status(400).json({ 'msg': err });
-            }
-            return res.status(201).json(user);
+app.post('/upload', upload.array('img[]'), (req, res, next) => {
+    try {
+        return res.status(201).json({
+            message: 'File uploded successfully'
         });
-    });
-};;
+    } catch (error) {
+        console.error(error);
+    }
+});
 
+
+
+routes.post('/register', userController.registerUser);
 // User Controller
 routes.post('/jobRestored', userController.jobRestored) //Restore Task 
 routes.post('/rejectedJobOrders', userController.rejectedJobOrders); //Cancelling or Rejecting the jobOrders

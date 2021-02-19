@@ -28,34 +28,34 @@ const pusher = new Pusher({
 });
 
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
-});
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-    }
-}
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads');
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.originalname);
+//     }
+// });
+// const fileFilter = (req, file, cb) => {
+//     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//         return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+//     }
+// }
+// const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
-app.post('/api/upload', upload.array('img[]'), (req, res, next) => {
-    try {
-        return res.status(201).json({
-            message: 'File uploded successfully'
-        });
-    } catch (error) {
-        console.error(error);
-    }
-});
+// app.post('/api/upload', upload.array('img[]'), (req, res, next) => {
+//     try {
+//         return res.status(201).json({
+//             message: 'File uploded successfully'
+//         });
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
 
 var messages = [];
 app.post('/api/messages', (req, res) => {

@@ -29,8 +29,8 @@ const pusher = new Pusher({
 
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const storage = multer.diskStorage({
-    destination: (req, file, callback) => { //this is storing the file in the images folder
-        callback(null, path.join(__dirname, '/uploads'));
+    destination: (req, file, cb) => {
+        cb(null, './uploads');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);

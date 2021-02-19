@@ -1,3 +1,5 @@
+"use strict";
+require('dotenv').config();
 var port = process.env.PORT || 5000;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -17,7 +19,16 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
-app.use(morgan('dev'));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+});
+
+//app.use(morgan('dev'));
 
 // For Pusher
 const pusher = new Pusher({
@@ -28,11 +39,11 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-app.use('/upload', express.static(path.join(__dirname, 'upload')));
+app.use('/upload',express.static(path.join(__dirname, 'upload')));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './upload/');
+        cb(null, 'upload');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);

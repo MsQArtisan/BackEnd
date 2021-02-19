@@ -28,11 +28,11 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './uploads/');
+        cb(null, './upload/');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);

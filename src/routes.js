@@ -9,54 +9,54 @@ const multer = require('multer');
 
 //const DIR = 'uploads';
 
-// var ObjectId = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, DIR);
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.originalname)
-//     }
-// });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
+});
 
-// var upload = multer({
-//     storage: storage,
-//     fileFilter: (req, file, cb) => {
-//         console.log(req);
-//         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-//             cb(null, true);
-//         } else {
-//             cb(null, false);
-//             return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-//         }
-//     }
-// });
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        console.log(req);
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
 
 
-// routes.post('/register',upload.array('image[]')),(req, res) => {
-//     console.log("testings!")
-//     User.findOne({ email: req.body.email }, (err, user) => {
-//         if (err) {
-//             return res.status(400).json({ 'msg': err });
-//         }
-//         if (user) {
-//             return res.status(400).json({ 'msg': 'The email already exists' });
-//         }
-//         const url = 'http://18.220.197.206:8080/' + 'uploads/';
-//         let artisan = new User(req.body);
+routes.post('/register',upload.array('image[]')),(req, res) => {
+    console.log("testings!")
+    User.findOne({ email: req.body.email }, (err, user) => {
+        if (err) {
+            return res.status(400).json({ 'msg': err });
+        }
+        if (user) {
+            return res.status(400).json({ 'msg': 'The email already exists' });
+        }
+        const url = 'http://18.220.197.206:5000/' + 'uploads/';
+        let artisan = new User(req.body);
 
-//         artisan['selfie'] = url + req.body.selfie;
-//         artisan['primaryIdPic'] = url + req.body.primaryIdPic;
-//         artisan['nbi'] = url + req.body.nbi;
-//         artisan.save((err, user) => {
-//             if (err) {
-//                 return res.status(400).json({ 'msg': err });
-//             }
-//             return res.status(201).json(user);
-//         });
-//     });
-// };;
+        artisan['selfie'] = url + req.body.selfie;
+        artisan['primaryIdPic'] = url + req.body.primaryIdPic;
+        artisan['nbi'] = url + req.body.nbi;
+        artisan.save((err, user) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }
+            return res.status(201).json(user);
+        });
+    });
+};;
 
 // User Controller
 routes.post('/jobRestored', userController.jobRestored) //Restore Task 

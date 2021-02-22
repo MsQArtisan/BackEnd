@@ -20,8 +20,8 @@ exports.registerUser = (req, res) => {
         if (user) {
             return res.status(400).json({ 'msg': 'The email already exists' });
         }
-        //const url = 'http://18.220.197.206:5000/upload/';
-        const url = 'http://localhost:5000/upload/';
+        const url = 'http://18.220.197.206:5000/upload/';
+        // const url = 'http://localhost:5000/src/uploads/';
         let artisan = new User(req.body);
 
         artisan['selfie'] = url + req.body.selfie;

@@ -39,12 +39,11 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-// app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(__dirname));
-//var DIR = './uploads'
+ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
+var DIR = 'uploads'
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,path.join(__dirname,'./uploads/'));
+        cb(null, DIR);
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
@@ -61,7 +60,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
-app.post('/api/upload', upload.array('image[]'), (req, res, next) => {
+app.post('/api/insertPhoto', upload.array('image[]'), (req, res, next) => {
     try {
         return res.status(201).json({
             message: 'File uploded successfully'

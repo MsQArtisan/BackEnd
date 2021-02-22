@@ -40,7 +40,7 @@ const pusher = new Pusher({
 });
 
 // app.use('/upload',express.static(path.join(__dirname, 'upload')));
-var DIR = './uploads'
+var DIR = 'uploads'
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);

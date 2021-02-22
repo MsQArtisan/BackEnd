@@ -20,12 +20,12 @@ exports.registerUser = (req, res) => {
         if (user) {
             return res.status(400).json({ 'msg': 'The email already exists' });
         }
-        const url = 'http://18.220.197.206:5000/' + 'uploads/';
+        // const url = 'http://18.220.197.206:5000/' + 'upload/';
         let artisan = new User(req.body);
 
-        artisan['selfie'] = url + req.body.selfie;
-        artisan['primaryIdPic'] = url + req.body.primaryIdPic;
-        artisan['nbi'] = url + req.body.nbi;
+        // artisan['selfie'] = url + req.body.selfie;
+        // artisan['primaryIdPic'] = url + req.body.primaryIdPic;
+        // artisan['nbi'] = url + req.body.nbi;
         artisan.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });

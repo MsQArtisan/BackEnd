@@ -40,7 +40,7 @@ const pusher = new Pusher({
 });
 
  app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
-var DIR = 'uploads'
+var DIR = './uploads'
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);
@@ -60,7 +60,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
-app.post('/api/insertPhoto', upload.array('image[]'), (req, res, next) => {
+app.post('/api/upload', upload.array('image[]'), (req, res, next) => {
     try {
         return res.status(201).json({
             message: 'File uploded successfully'

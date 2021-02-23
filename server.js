@@ -39,16 +39,16 @@ const pusher = new Pusher({
     useTLS: true
 });
 
- app.use('/photos',express.static(path.join(__dirname, 'photos/')));
+//  app.use('/photos',express.static(path.join(__dirname, 'photos/')));
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'photos');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'photos');
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.originalname);
+//     }
+// });
 const fileFilter = (req, file, cb) => {
     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
         cb(null, true);
@@ -57,7 +57,7 @@ const fileFilter = (req, file, cb) => {
         return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
 }
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+const upload = multer({ fileFilter: fileFilter, dest: 'public/' });
 
 
 app.post('/api/upload', upload.array('image[]'), (req, res, next) => {

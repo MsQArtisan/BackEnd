@@ -39,11 +39,11 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-//  app.use('/photos',express.static(path.join(__dirname, 'photos')));
-var DIR = '/BackEnd/photos'
+ app.use('/photos',express.static(path.join(__dirname, 'photos/')));
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, DIR);
+        cb(null, 'photos');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);

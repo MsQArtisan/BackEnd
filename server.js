@@ -36,7 +36,7 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-const DIR = './../photos';
+const DIR = 'src';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);

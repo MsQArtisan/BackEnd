@@ -8,7 +8,7 @@ const AuthCtrl = require('./controller/resetPassword-controller');
 const multer = require('multer');
 var User = require('./models/artisan-model');
 
-const DIR = 'photos';
+var DIR = '../photos'
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

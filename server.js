@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 require('dotenv').config();
 var port = process.env.PORT || 5000;
 var express = require('express');
@@ -12,7 +12,7 @@ const path = require('path');
 const Pusher = require('pusher');
 const cookieParser = require('cookie-parser');
 const server = require('http').createServer(app);
-
+app.use('/photos', express.static('photos'));
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -28,8 +28,6 @@ app.use((req, res, next) => {
     next();
 });
 
-//app.use(morgan('dev'));
-
 // For Pusher
 const pusher = new Pusher({
     appId: "1106641",
@@ -39,11 +37,10 @@ const pusher = new Pusher({
     useTLS: true
 });
 
- app.use('/photos',express.static(path.join(__dirname, 'photos/')));
-
+const DIR = '../photos';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'photos');
+        cb(null, DIR);
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
@@ -57,7 +54,7 @@ const fileFilter = (req, file, cb) => {
         return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
 }
-const upload = multer({ fileFilter: fileFilter, dest: 'public/' });
+const upload = multer({ fileFilter: fileFilter, storage: storage });
 
 
 app.post('/api/upload', upload.array('image[]'), (req, res, next) => {

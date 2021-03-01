@@ -36,7 +36,7 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-const DIR = 'src';
+const DIR = 'photos';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, DIR);
@@ -46,7 +46,7 @@ const storage = multer.diskStorage({
     }
 });
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
         cb(null, true);
     } else {
         cb(null, false);
@@ -56,7 +56,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ fileFilter: fileFilter, storage: storage });
 
 
-app.post('/api/upload', upload.array('image[]'), (req, res, next) => {
+app.post('/api/upload', upload.array('image[]', 3), (req, res, next) => {
     try {
         return res.status(201).json({
             message: 'File uploded successfully'
@@ -77,7 +77,7 @@ app.post('/api/messages', (req, res) => {
 app.get('/api/allMessages', (req, res) => {
     res.send(messages)
 })
-app.get('/' ,(req,res)=>res.send("Server is running..."));
+app.get('/', (req, res) => res.send("Server is running..."));
 
 var routes = require('./src/routes');
 app.use('/api', routes);

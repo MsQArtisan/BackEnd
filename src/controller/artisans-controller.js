@@ -37,7 +37,7 @@ var upload = multer({
     }
 });
 
-exports.registerUser = upload.array('image[]'), (req, res) => {
+exports.registerUser = upload.array('image[]',3), (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) {
             return res.status(400).json({ 'msg': err });

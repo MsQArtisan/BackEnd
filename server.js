@@ -8,7 +8,6 @@ var mongoose = require('mongoose');
 var config = require('./src/config/config');
 var cors = require('cors');
 var app = express();
-const path = require('path');
 const Pusher = require('pusher');
 const cookieParser = require('cookie-parser');
 const server = require('http').createServer(app);
@@ -37,35 +36,35 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-// const DIR = '/photos';
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, DIR);
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.originalname);
-//     }
-// });
-// const fileFilter = (req, file, cb) => {
-//     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
-//         cb(null, true);
-//     } else {
-//         cb(null, false);
-//         return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-//     }
-// }
-// const upload = multer({ fileFilter: fileFilter, storage: storage });
+const DIR = '../photos/';
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+}
+const upload = multer({ fileFilter: fileFilter, storage: storage });
 
 
-// app.post('/api/upload', upload.array('image[]'), (req, res, next) => {
-//     try {
-//         return res.status(201).json({
-//             message: 'File uploded successfully'
-//         });
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
+app.post('/api/upload', upload.array('image[]'), (req, res, next) => {
+    try {
+        return res.status(201).json({
+            message: 'File uploded successfully'
+        });
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 
 var messages = [];

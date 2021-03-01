@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var userTask = require('../models/taskOfEveryUsers')
 var logsOfHistory = require('../models/logsHistory')
+const multer = require('multer');
 var loggedusers = []
 
 function createToken(user) {
@@ -12,7 +13,31 @@ function createToken(user) {
     });
 }
 
-exports.registerUser = (req, res) => {
+const DIR = 'photos';
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        console.log(req);
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
+
+exports.registerUser = upload.array('image[]'), (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) {
             return res.status(400).json({ 'msg': err });

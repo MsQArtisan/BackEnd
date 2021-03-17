@@ -16,6 +16,7 @@ routes.post('/allCompletedJobs', userController.completedJob)
 routes.post('/logout', userController.logoutUser)
 routes.post('/register', userController.registerUser);
 routes.post('/login', userController.loginUser);
+routes.post('/checkcredit', userController.checkcredit);
 routes.post('/account', userController.getUser);
 routes.post('/deletedCompletedTask', userController.deletedCompletedTask) //Deleted Task Or Store Task under Rejected  History Tracker
 routes.get('/allActiveUsers', userController.returnAllActiveUsers)

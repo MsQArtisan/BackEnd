@@ -3,14 +3,32 @@ var Orders = require('../models/Bookings')
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var userTask = require('../models/taskOfEveryUsers')
+var Credit = require('../models/artisanscredits')
 var logsOfHistory = require('../models/logsHistory')
 var loggedusers = []
 
 function createToken(user) {
     return jwt.sign({ _id: user.id, email: user.email }, config.jwtSecret, {
-        expiresIn: 86400 //expires in 24 hours
+        expiresIn: 86400//expires in 24 hours86400
     });
 }
+
+exports.checkcredit = (req, res) => {
+    var credit = [];
+    Credit.findOne({ certainUserID:req.body.userId }, (err, user) => {
+        // if (err) {
+        //     return res.status(400).json({ 'msg': err });
+        // }
+        if (user != null) {
+            credit.push({ status: user.userSituation, credit: user.certainUserCredits });
+            return res.status(201).json(credit);
+        }
+        else {
+            credit.push({ status: null, credit: 0 });
+            return res.status(201).json(credit);
+        }
+    });
+};
 
 exports.registerUser = (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
@@ -20,8 +38,8 @@ exports.registerUser = (req, res) => {
         if (user) {
             return res.status(400).json({ 'msg': 'The email already exists' });
         }
-        const url = 'http://18.220.197.206:5000/photos/';
-        // const url = 'http://localhost:5000/photos/';
+        // const url = 'http://18.220.197.206:5000/photos/';
+        const url = 'http://localhost:5000/photos/';
         let artisan = new User(req.body);
 
         artisan['selfie'] = url + req.body.selfie;
